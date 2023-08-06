@@ -44,5 +44,7 @@ The single page application design optimises navigation and responsiveness while
 
 
 
-### Project Live URI:  [Live Demo]
+### Project Live URI:  [Live Demo](https://ayush-923.github.io/FitnessFusion/)
+
+
 
