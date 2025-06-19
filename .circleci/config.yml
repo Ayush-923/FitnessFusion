@@ -1,23 +1,25 @@
 version: 2.1
-
 jobs:
-  build:
+  armorcode-validate:
     docker:
-      - image: cimg/base:2023.11
-    parallelism: 4
-    resource_class: large
+      - image: byrnedo/alpine-curl
+    environment:
+      armorcodehost: https://qa.armorcode.ai
+      product: Application Security
+      subProduct: Code Scanner
+      environment: Production
+      token: f5ad43ab-5140-4646-8f0a-ce0de04045a1
+      buildTool: CIRCLE_CI
+      buildNumber: "<< pipeline.number >>"
+      end: 30
     steps:
-      - checkout
       - run:
+          name: "Armorcode Validate"
           command: |
-            mkdir test-results
-            pnpm run serve &
-            TESTFILES=$(circleci tests glob "specs/e2e/**/*.spec.ts")
-            echo "$TESTFILES" | circleci tests run --command="xargs pnpm playwright test --config=playwright.config.ci.ts --reporter=junit" --verbose --split-by=timings
-      - store_test_results:
-          path: results.xml
-
+              token=f5ad43ab-5140-4646-8f0a-ce0de04045a1
+              wget https://qa.armorcode.ai/static/scripts/slastatus.sh
+              sh slastatus.sh
 workflows:
-  build-and-test:
+  armorcode-validation-workflow:
     jobs:
-      - build
+      - armorcode-validate
